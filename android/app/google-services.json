@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "239081370386",
+    "firebase_url": "https://nabtiti-d87f7-default-rtdb.firebaseio.com",
+    "project_id": "nabtiti-d87f7",
+    "storage_bucket": "nabtiti-d87f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239081370386:android:d0ea97b3b84afd622579cb",
+        "android_client_info": {
+          "package_name": "com.example.nabtiti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMgLWGcDpaPL_YMC6cTyVadg1w-RZnHjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
