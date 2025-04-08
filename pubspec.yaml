@@ -62,7 +62,7 @@ flutter:
     - assets/logo.png
     - assets/bg_after.png
     - assets/tomato.png
-    - assets/corn.png
+    - assets/wheat.png
     - assets/potato.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
