@@ -177,11 +177,14 @@ Widget _buildBottomNavBar(BuildContext context) {
     unselectedItemColor: Colors.white70,
     items: [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.info), label: "Info"),
+      BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
     ],
     onTap: (index) {
       if (index == 0) {
         Navigator.pushNamed(context, '/home');
+      }
+      else if (index == 1){
+        Navigator.pushNamed(context, '/chatbot');
       }
     },
   );

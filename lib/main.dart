@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:ui' as ui;
-import 'dart:math';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
+import 'NABTITI/UI/ChatBot/Page/core/di/service_locator.dart';
+import 'NABTITI/UI/ChatBot/Page/presentation/pages/chat_page.dart';
 import 'NABTITI/UI/Home/Page/Home.dart';
 import 'NABTITI/UI/Login/Page/LoginScreen.dart';
 import 'NABTITI/UI/Register/Page/RegisterScreen.dart';
@@ -16,9 +12,10 @@ import 'NABTITI/UI/UploadImage/Page/UploadImageScreen.dart';
 
 
 void main() async {
+  setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,6 +27,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/upload': (context) => UploadImageScreen(),
         '/home': (context) => Home(),
+        '/chatbot': (context) => ChatPage(),
+
       },
     );
   }
