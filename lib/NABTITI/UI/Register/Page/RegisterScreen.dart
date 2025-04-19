@@ -76,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _backButton(context),
-                  Image.asset('assets/logo.png', height: 50),
+                  Image.asset('assets/logo.png', height: 90,width: 120,color: Colors.black,),
                 ],
               ),
               const SizedBox(height: 40),
@@ -87,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text("Register yourself with us",
                   style: GoogleFonts.poppins(fontSize: 16, color: Color(0xFF063A23))),
               const SizedBox(height: 40),
-              _buildTextField(Icons.email_outlined, "Phone number or E-mail", emailController),
+              _buildTextField(Icons.email_outlined, "E-mail", emailController),
               _buildPasswordField(passwordController, "Password", showPassword, () {
                 setState(() {
                   showPassword = !showPassword;
@@ -105,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account?",
+                  Text("Already have an account ?",
                       style: GoogleFonts.poppins(color: Colors.grey)),
                   TextButton(
                     onPressed: () => Navigator.pushReplacement(context,
