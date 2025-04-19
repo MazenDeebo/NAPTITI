@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../main.dart';
+import '../../Landing/page/landing.dart';
 import '../../Login/Page/LoginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -60,6 +61,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Stack(
         children: [
           _buildBackground(),
+          Row(
+            children: [
+              SizedBox(height: 100,),
+              IconButton(
+                  onPressed: (){
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LandingScreen()),
+                    );
+                  },
+                  icon: Icon(
+                      color: Colors.white,
+                      Icons.arrow_back_ios_new_outlined
+                  )
+              ),
+
+            ],
+          ),
           Center(
             child: SingleChildScrollView(
               child: Column(
@@ -80,7 +99,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       repeatPasswordController, isPassword: true),
                   const SizedBox(height: 20),
                   _buildButton(context, "Sign Up", _register),
-                  _buildLoginLink(context),
                 ],
               ),
             ),
@@ -151,10 +169,3 @@ Widget _buildLogo() {
   );
 }
 
-Widget _buildLoginLink(BuildContext context) {
-  return TextButton(
-    onPressed: () => Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen())),
-    child: Text("Login", style: GoogleFonts.poppins(color: Colors.white)),
-  );
-}

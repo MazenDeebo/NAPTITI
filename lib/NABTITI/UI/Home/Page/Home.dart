@@ -1,6 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../shared.dart';
+import '../../Login/Page/LoginScreen.dart';
 
+void saveLogout() async{
+  PreferenceUtils.setBool(prefKeys.loggedIn,false);
+}
 // 🔹 PLANT SELECTION SCREEN
 class Home extends StatelessWidget {
   @override
@@ -102,6 +108,7 @@ Widget _buildBottomNavBar(BuildContext context) {
     items: [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
       BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
+      BottomNavigationBarItem(icon: Icon(Icons.logout), label: "LogOut"),
     ],
     onTap: (index) {
       if (index == 0) {
@@ -109,6 +116,14 @@ Widget _buildBottomNavBar(BuildContext context) {
       }
       else if (index == 1){
         Navigator.pushNamed(context, '/chatbot');
+      }
+      else if (index == 2){
+        saveLogout();
+        FirebaseAuth.instance.signOut();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context)=> LoginScreen())
+        );
       }
     },
   );
