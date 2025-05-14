@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../DetectionResult/Page/DetectionResultScreen.dart';
+
 
 // 🔹 UPLOAD IMAGE SCREEN
 class UploadImageScreen extends StatefulWidget {
@@ -114,8 +116,22 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                 // Approve Button
                 ElevatedButton(
                   onPressed: () {
-                    // Implement approval logic
-                  },
+                    if (_selectedImage != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetectionResultScreen(
+                            imageFile: _selectedImage!,
+                            diseaseName: 'Early Blight',
+                            cause: 'Caused by the fungus *Alternaria solani*, often due to warm, wet conditions.',
+                            organicTreatment: 'Neem oil spray, crop rotation, and compost tea.',
+                            chemicalTreatment: 'Chlorothalonil or Mancozeb-based fungicides.',
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                  ,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[800],
                     shape: RoundedRectangleBorder(
