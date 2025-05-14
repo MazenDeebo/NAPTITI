@@ -16,6 +16,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController = TextEditingController();
 
+  bool showPassword = false;
+  bool showRepeatPassword = false;
+
   Future<void> _register() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
@@ -35,7 +38,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: password,
       );
 
-      await FirebaseFirestore.instance.collection("USER").doc(userCredential.user!.uid).set({
+      await FirebaseFirestore.instance
+          .collection("USER")
+          .doc(userCredential.user!.uid)
+          .set({
         "Email": email,
         "Password": password,
         "RegistrationDate": Timestamp.now(),
@@ -57,104 +63,141 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(),
-          Center(
-            child: SingleChildScrollView(
-              child: Column(
+      backgroundColor: const Color(0xFFFAF9F5),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildLogo(),
-                  Text("Hi!",
-                      style: GoogleFonts.poppins(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                  Text("Register yourself with us",
-                      style: GoogleFonts.poppins(color: Colors.white)),
-                  const SizedBox(height: 20),
-                  _buildTextField(Icons.email, "Email", emailController),
-                  _buildTextField(Icons.lock, "Password", passwordController,
-                      isPassword: true),
-                  _buildTextField(Icons.lock, "Repeat your password",
-                      repeatPasswordController, isPassword: true),
-                  const SizedBox(height: 20),
-                  _buildButton(context, "Sign Up", _register),
-                  _buildLoginLink(context),
+                  _backButton(context),
+                  Image.asset('assets/logo.png', height: 50),
                 ],
               ),
-            ),
+              const SizedBox(height: 40),
+              Text("Hi!",
+                  style: GoogleFonts.poppins(
+                      fontSize: 32, fontWeight: FontWeight.bold, color: Color(0xFF063A23))),
+              const SizedBox(height: 8),
+              Text("Register yourself with us",
+                  style: GoogleFonts.poppins(fontSize: 16, color: Color(0xFF063A23))),
+              const SizedBox(height: 40),
+              _buildTextField(Icons.email_outlined, "Phone number or E-mail", emailController),
+              _buildPasswordField(passwordController, "Password", showPassword, () {
+                setState(() {
+                  showPassword = !showPassword;
+                });
+              }),
+              _buildPasswordField(repeatPasswordController, "Repeat your password",
+                  showRepeatPassword, () {
+                    setState(() {
+                      showRepeatPassword = !showRepeatPassword;
+                    });
+                  }),
+              const SizedBox(height: 20),
+              _buildSignUpButton(),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account?",
+                      style: GoogleFonts.poppins(color: Colors.grey)),
+                  TextButton(
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen())),
+                    child: Text("Login",
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF063A23))),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
-}
 
-// 🔹 COMMON WIDGETS
-Widget _buildTextField(IconData icon, String hint,
-    TextEditingController controller,
-    {bool isPassword = false}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-    child: TextField(
-      controller: controller,
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: Colors.black54),
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+  Widget _backButton(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: const Color(0xFF063A23),
+            borderRadius: BorderRadius.circular(16)),
+        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-    child: SizedBox(
+  Widget _buildTextField(
+      IconData icon, String hint, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: Colors.white),
+          filled: true,
+          fillColor: Color(0xFF063A23),
+          hintText: hint,
+          hintStyle: GoogleFonts.poppins(color: Colors.white),
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        ),
+        style: GoogleFonts.poppins(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(TextEditingController controller, String hint,
+      bool isVisible, VoidCallback toggleVisibility) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextField(
+        controller: controller,
+        obscureText: !isVisible,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.vpn_key, color: Colors.white),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isVisible ? Icons.visibility_off : Icons.visibility,
+              color: Colors.white,
+            ),
+            onPressed: toggleVisibility,
+          ),
+          filled: true,
+          fillColor: Color(0xFF063A23),
+          hintText: hint,
+          hintStyle: GoogleFonts.poppins(color: Colors.white),
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        ),
+        style: GoogleFonts.poppins(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildSignUpButton() {
+    return SizedBox(
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: _register,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF063A23),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-        child: Text(text,
-            style: GoogleFonts.poppins(color: Colors.white, fontSize: 18)),
+            backgroundColor: Color(0xFF063A23),
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+        child: Text("Sign Up",
+            style: GoogleFonts.poppins(fontSize: 18, color: Colors.white)),
       ),
-    ),
-  );
-}
-
-Widget _buildBackground() {
-  return Container(
-    decoration: const BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/bg_login.png'),
-        fit: BoxFit.cover,
-      ),
-    ),
-  );
-}
-
-Widget _buildLogo() {
-  return Column(
-    children: [
-      const SizedBox(height: 40),
-      Image.asset('assets/logo.png', width: 200, height: 200),
-      const SizedBox(height: 10),
-    ],
-  );
-}
-
-Widget _buildLoginLink(BuildContext context) {
-  return TextButton(
-    onPressed: () => Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen())),
-    child: Text("Login", style: GoogleFonts.poppins(color: Colors.white)),
-  );
+    );
+  }
 }
