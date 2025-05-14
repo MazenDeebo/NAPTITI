@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:nabtiti/NABTITI/UI/Landing/page/landing.dart';
 import 'NABTITI/UI/ChatBot/Page/core/di/service_locator.dart';
 import 'NABTITI/UI/ChatBot/Page/presentation/pages/chat_page.dart';
 import 'NABTITI/UI/Home/Page/Home.dart';
 import 'NABTITI/UI/Login/Page/LoginScreen.dart';
 import 'NABTITI/UI/Register/Page/RegisterScreen.dart';
 import 'NABTITI/UI/UploadImage/Page/UploadImageScreen.dart';
+import 'NABTITI/shared.dart';
 
 
 void main() async {
@@ -34,9 +37,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-
-
 // 🔹 SPLASH SCREEN WITH ANIMATION
 class SplashScreen extends StatefulWidget {
   @override
@@ -56,11 +56,15 @@ class _SplashScreenState extends State<SplashScreen> {
         _scale = 1.0;
       });
     });
-
+    ;
     Timer(const Duration(seconds: 7), () {
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => FirebaseAuth.instance.currentUser==null? LoginScreen():Home()),
+      // );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => RegisterScreen()),
+        MaterialPageRoute(builder: (context) => LandingScreen()),
       );
     });
   }
@@ -159,6 +163,7 @@ class _PostLoginSplashScreenState extends State<PostLoginSplashScreen> {
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration(seconds: 4), () {
       if (mounted) {
         Navigator.pushReplacement(

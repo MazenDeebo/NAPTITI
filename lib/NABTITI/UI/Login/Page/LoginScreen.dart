@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nabtiti/NABTITI/UI/Landing/page/landing.dart';
 
 import '../../../../main.dart';
+import '../../../shared.dart';
+import '../../Home/Page/Home.dart';
 import '../../Register/Page/RegisterScreen.dart';
 
 
@@ -11,6 +14,14 @@ import '../../Register/Page/RegisterScreen.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
+}
+
+void joinAsGuest() async{
+  PreferenceUtils.setBool(prefKeys.loggedIn,false);
+}
+
+void joinAsUser() async{
+  PreferenceUtils.setBool(prefKeys.loggedIn,true);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -37,13 +48,17 @@ class _LoginScreenState extends State<LoginScreen> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
-      );
+      ).then((value){
+        joinAsUser();
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login Successful!")),
       );
+
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => PostLoginSplashScreen()));
+          context, MaterialPageRoute(builder: (context) => PostLoginSplashScreen())
+      );
       // Navigate to home screen (Replace with your screen)
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -58,6 +73,24 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           _buildBackground(),
+          Row(
+            children: [
+              SizedBox(height: 100,),
+              IconButton(
+                  onPressed: (){
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LandingScreen()),
+                    );
+                    },
+                  icon: Icon(
+                      color: Colors.white,
+                      Icons.arrow_back_ios_new_outlined
+                  )
+              ),
+
+            ],
+          ),
           Center(
             child: SingleChildScrollView(
               child: Column(
@@ -80,14 +113,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                        },
                         child: Text("Forgot your password?",
                             style: GoogleFonts.poppins(color: Colors.white)),
                       ),
                     ),
                   ),
                   _buildButton(context, "Login", _login),
-                  _buildRegisterLink(context),
+                  //_buildRegisterLink(context),
                 ],
               ),
             ),
@@ -97,6 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
 
 
 
@@ -164,9 +200,9 @@ Widget _buildLogo() {
 
 Widget _buildRegisterLink(BuildContext context) {
   return TextButton(
-    onPressed: () => Navigator.push(
+    onPressed: () => Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => RegisterScreen())),
-    child: Text("Register", style: GoogleFonts.poppins(color: Colors.white)),
+    child: Text("Don't have an account ? Sign Up", style: GoogleFonts.poppins(color: Colors.white)),
   );
 }
 

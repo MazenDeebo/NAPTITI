@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nabtiti/NABTITI/UI/Landing/page/landing.dart';
 
 import '../../../../main.dart';
 import '../../Login/Page/LoginScreen.dart';
@@ -75,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _backButton(context),
-                  Image.asset('assets/logo.png', height: 50),
+                  Image.asset('assets/logo.png', height: 90,width: 120,color: Colors.black,),
                 ],
               ),
               const SizedBox(height: 40),
@@ -86,16 +87,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Text("Register yourself with us",
                   style: GoogleFonts.poppins(fontSize: 16, color: Color(0xFF063A23))),
               const SizedBox(height: 40),
-              _buildTextField(Icons.email_outlined, "Phone number or E-mail", emailController),
+              _buildTextField(Icons.email_outlined, "E-mail", emailController),
               _buildPasswordField(passwordController, "Password", showPassword, () {
                 setState(() {
                   showPassword = !showPassword;
                 });
               }),
               _buildPasswordField(repeatPasswordController, "Repeat your password",
-                  showRepeatPassword, () {
+                  showPassword, () {
                     setState(() {
-                      showRepeatPassword = !showRepeatPassword;
+                      showPassword = !showPassword;
                     });
                   }),
               const SizedBox(height: 20),
@@ -104,10 +105,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account?",
+                  Text("Already have an account ?",
                       style: GoogleFonts.poppins(color: Colors.grey)),
                   TextButton(
-                    onPressed: () => Navigator.push(context,
+                    onPressed: () => Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => LoginScreen())),
                     child: Text("Login",
                         style: GoogleFonts.poppins(
@@ -126,7 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _backButton(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pop(context),
+      onTap: () => Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => LandingScreen())),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
