@@ -9,12 +9,6 @@ import 'dart:math';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-// Import our new screens
-import 'screens/upload_screen.dart';
-import 'screens/results_screen.dart';
-import 'services/api_service.dart';
-import 'models/detection_result.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,10 +25,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/upload': (context) => UploadImageScreen(),
         '/home': (context) => PlantSelectionScreen(),
-        '/results': (context) => ResultsScreen(
-              imageFile: ModalRoute.of(context)!.settings.arguments as File,
-              results: const [],
-            ),
       },
     );
   }
