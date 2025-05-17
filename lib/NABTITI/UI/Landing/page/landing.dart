@@ -1,16 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../main.dart';
 import '../../../shared.dart';
 import '../../Home/Page/Home.dart';
 import '../../Login/Page/LoginScreen.dart';
 import '../../Register/Page/RegisterScreen.dart';
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
-
   @override
   State<LandingScreen> createState() => _LandingScreenState();
 }
@@ -61,8 +57,9 @@ class _LandingScreenState extends State<LandingScreen> {
                   SizedBox(height: 20,),
                   TextButton(
                     onPressed: () {
+
                       //joining as guest
-                      // joinAsGuest();
+                      joinAsGuest();
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

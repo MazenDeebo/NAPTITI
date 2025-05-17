@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nabtiti/NABTITI/UI/Login/Page/ForgetPassword.dart';
 
 import '../../../../main.dart';
 import '../../../shared.dart';
@@ -99,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password,
       ).then((value) {
         joinAsUser();
+
       });
 
 
@@ -169,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(40) //                 <--- border radius here
+                        top: Radius.circular(40) //
                     ),
                   ),
                   child: SingleChildScrollView(
@@ -195,7 +197,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ForgetPasswordSceen()),
+                              );
+                            },
                             child: Text("Forgot your password?",
                                 style: GoogleFonts.poppins(
                                     color: const Color(0xFF063A23),

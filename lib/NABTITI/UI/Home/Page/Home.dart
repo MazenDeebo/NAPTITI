@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 
 import '../../../shared.dart';
 import '../../Landing/page/landing.dart';
-import '../../Login/Page/LoginScreen.dart';
 
 void saveLogout() async{
   PreferenceUtils.setBool(prefKeys.loggedIn,false);
 }
-// 🔹 PLANT SELECTION SCREEN
+
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,6 @@ class Home extends StatelessWidget {
       bottomNavigationBar: _buildBottomNavBar(context),
       body: Stack(
         children: [
-          // Background Image
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -29,12 +27,10 @@ class Home extends StatelessWidget {
             ),
           ),
 
-          // Centering Content
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min, // Keeps the column compact
               children: [
-                // Title
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
@@ -49,7 +45,6 @@ class Home extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
 
-                // Scrollable Plant Selection List
                 SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -63,13 +58,13 @@ class Home extends StatelessWidget {
                               Navigator.pushNamed(
                                 context,
                                 '/upload',
-                                arguments: plant['name'], // Pass plant name
+                                arguments: plant['name'],
                               );
                             },
                             borderRadius: BorderRadius.circular(15),
                             child: Container(
-                              width: 200, // Button width
-                              height: 200, // Button height
+                              width: 200,
+                              height: 200,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 image: DecorationImage(
@@ -100,20 +95,21 @@ class Home extends StatelessWidget {
   }
 }
 
-// Bottom Navigation Bar
+
 Widget _buildBottomNavBar(BuildContext context) {
   return BottomNavigationBar(
-    backgroundColor: Colors.green[800],
+    backgroundColor: Color(0xFF063A23),
+    elevation: 0,
     selectedItemColor: Colors.white,
-    unselectedItemColor: Colors.white70,
-    items: [
+    unselectedItemColor: Colors.grey,
+    items:const [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
       BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
       BottomNavigationBarItem(icon: Icon(Icons.logout), label: "LogOut"),
     ],
     onTap: (index) {
       if (index == 0) {
-        Navigator.pushNamed(context, '/home');
+        //Navigator.pushNamed(context, '/home');
       }
       else if (index == 1){
         Navigator.pushNamed(context, '/chatbot');
@@ -130,7 +126,7 @@ Widget _buildBottomNavBar(BuildContext context) {
   );
 }
 
-// List of Plants
+
 final List<Map<String, String>> plantList = [
   {"name": "Tomato", "image": "assets/tomato.png"},
   {"name": "Potato", "image": "assets/potato.png"},

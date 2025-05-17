@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,10 +7,7 @@ import 'package:nabtiti/NABTITI/UI/Landing/page/landing.dart';
 import 'NABTITI/UI/ChatBot/Page/core/di/service_locator.dart';
 import 'NABTITI/UI/ChatBot/Page/presentation/pages/chat_page.dart';
 import 'NABTITI/UI/Home/Page/Home.dart';
-import 'NABTITI/UI/Login/Page/LoginScreen.dart';
-import 'NABTITI/UI/Register/Page/RegisterScreen.dart';
 import 'NABTITI/UI/UploadImage/Page/UploadImageScreen.dart';
-import 'NABTITI/shared.dart';
 
 
 void main() async {
@@ -110,7 +106,7 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => LandingScreen()),
         );
       }
     });
