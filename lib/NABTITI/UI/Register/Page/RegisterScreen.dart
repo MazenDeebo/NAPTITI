@@ -8,6 +8,10 @@ import '../../../../main.dart';
 import '../../Login/Page/LoginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen( {super.key, this.fromLogin=false});
+  final bool fromLogin;
+
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -126,7 +130,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _backButton(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingScreen())),
+      onTap: () {
+        widget.fromLogin? Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginScreen())):Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingScreen()));
+      },
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(

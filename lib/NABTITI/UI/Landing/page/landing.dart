@@ -57,7 +57,6 @@ class _LandingScreenState extends State<LandingScreen> {
                   SizedBox(height: 20,),
                   TextButton(
                     onPressed: () {
-
                       //joining as guest
                       joinAsGuest();
                       Navigator.pushReplacement(

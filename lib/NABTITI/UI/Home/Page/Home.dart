@@ -102,26 +102,33 @@ Widget _buildBottomNavBar(BuildContext context) {
     elevation: 0,
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.grey,
-    items:const [
+    items: [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
       BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
       BottomNavigationBarItem(icon: Icon(Icons.logout), label: "LogOut"),
     ],
     onTap: (index) {
-      if (index == 0) {
-        //Navigator.pushNamed(context, '/home');
-      }
-      else if (index == 1){
-        Navigator.pushNamed(context, '/chatbot');
-      }
-      else if (index == 2){
-        saveLogout();
-        FirebaseAuth.instance.signOut();
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context)=> LandingScreen())
-        );
-      }
+        if (index == 0) {
+          //Navigator.pushNamed(context, '/home');
+        }
+        else if (index == 1){
+          if (PreferenceUtils.getBool(prefKeys.loggedIn) == false){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Log in to use the chat bot")),
+            );
+          }
+          else{
+            Navigator.pushNamed(context, '/chatbot');
+          }
+        }
+        else if (index == 2){
+          saveLogout();
+          FirebaseAuth.instance.signOut();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context)=> LandingScreen())
+          );
+        }
     },
   );
 }

@@ -7,7 +7,8 @@ enum prefKeys{
   loggedIn,
   language,
   theme,
-  apiToken
+  apiToken,
+  fromLogin
 }
 
 class PreferenceUtils {
