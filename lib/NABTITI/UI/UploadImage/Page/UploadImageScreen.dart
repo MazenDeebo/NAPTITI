@@ -1,42 +1,52 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../shared.dart';
 import '../../DetectionResult/Page/DetectionResultScreen.dart';
+import '../../DetectionResult/Page/Diseases.dart';
+import '../../Home/Page/Home.dart';
 
 
-// 🔹 UPLOAD IMAGE SCREEN
 class UploadImageScreen extends StatefulWidget {
+  UploadImageScreen({required this.chosenType});
+  final String chosenType;
   @override
   _UploadImageScreenState createState() => _UploadImageScreenState();
 }
-
+void saveLogout() async{
+  PreferenceUtils.setBool(prefKeys.loggedIn,false);
+}
 class _UploadImageScreenState extends State<UploadImageScreen> {
-  File? _selectedImage; // Store the captured image
+  File? _selectedImage;
 
-  // Function to open the camera
-  Future<void> _pickImage() async {
+  Future<void> _takeImage() async {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
-
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path); // Store image in state
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+  Future<void> _pickImage() async{
+    final pickedFile = await ImagePicker().pickImage(source:ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final String plantName =
-        ModalRoute.of(context)?.settings.arguments as String? ?? "Unknown";
-
     return Scaffold(
-      bottomNavigationBar: _buildBottomNavBar(context),
       body: Stack(
         children: [
-          // Background Image
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -47,15 +57,28 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
               ),
             ),
           ),
-
-          // Centering Content
+          Column(
+            children: [
+              SizedBox(height: 40,),
+              IconButton(
+                  onPressed: (){
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Home()
+                        )
+                    );
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white)),
+            ],
+          ),
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Title
                 Text(
-                  "Upload an Image",
+                  "Take an Image",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -63,14 +86,11 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-
-                // Circular Camera Button
                 GestureDetector(
-                  onTap: _pickImage, // Open camera on tap
+                  onTap: _takeImage,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Dashed Circle
                       SizedBox(
                         width: 200,
                         height: 200,
@@ -78,7 +98,6 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                           painter: DashedCirclePainter(),
                         ),
                       ),
-                      // Display Image if Selected
                       if (_selectedImage != null)
                         ClipOval(
                           child: Image.file(
@@ -98,48 +117,57 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-
-                // Add Image Button
                 ElevatedButton(
                   onPressed: _pickImage,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[800],
+                    backgroundColor: Color(0xFF063A23),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                     minimumSize: Size(180, 50),
                   ),
-                  child: Text("Add Image", style: TextStyle(color: Colors.white)),
+                  child: Text("pick Image", style: TextStyle(color: Colors.white)),
                 ),
                 SizedBox(height: 15),
-
-                // Approve Button
                 ElevatedButton(
                   onPressed: () {
                     if (_selectedImage != null) {
-                      Navigator.push(
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetectionResultScreen(
+                          builder: (context) => PostDetectionResultScreen(
                             imageFile: _selectedImage!,
-                            diseaseName: 'Early Blight',
-                            cause: 'Caused by the fungus *Alternaria solani*, often due to warm, wet conditions.',
-                            organicTreatment: 'Neem oil spray, crop rotation, and compost tea.',
-                            chemicalTreatment: 'Chlorothalonil or Mancozeb-based fungicides.',
+                            plantType: widget.chosenType.toLowerCase(),
                           ),
                         ),
                       );
                     }
-                  }
-                  ,
+                    else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("take or pick an image first"),
+                          backgroundColor: Color(0xFF063A23),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(20)
+                            ),
+                          ),
+                          margin: EdgeInsets.all(20),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[800],
+                    backgroundColor: Color(0xFF063A23),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                     minimumSize: Size(180, 50),
                   ),
-                  child: Text("Approve", style: TextStyle(color: Colors.white)),
+                  child: Text("Detect Diseases", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -152,7 +180,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
 
 
 
-// Custom Painter for Dashed Circular Border
+
 class DashedCirclePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -163,7 +191,7 @@ class DashedCirclePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     double radius = size.width / 2;
-    double dashWidth = 10, dashSpace = 5;
+    double dashWidth = 13, dashSpace = 6;
     double totalCircumference = 2 * pi * radius;
     int dashCount = (totalCircumference / (dashWidth + dashSpace)).floor();
 
@@ -185,23 +213,131 @@ class DashedCirclePainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
-// Bottom Navigation Bar
-Widget _buildBottomNavBar(BuildContext context) {
-  return BottomNavigationBar(
-    backgroundColor: Colors.green[800],
-    selectedItemColor: Colors.white,
-    unselectedItemColor: Colors.white70,
-    items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
-    ],
-    onTap: (index) {
-      if (index == 0) {
-        Navigator.pushNamed(context, '/home');
+
+class PostDetectionResultScreen extends StatefulWidget {
+  final File imageFile;
+  final String plantType;
+
+  const PostDetectionResultScreen({
+    super.key,
+    required this.imageFile,
+    required this.plantType,
+  });
+
+  @override
+  _PostDetectionResultScreenState createState() => _PostDetectionResultScreenState();
+}
+
+
+class _PostDetectionResultScreenState extends State<PostDetectionResultScreen> {
+  final Dio dio = Dio();
+
+  @override
+  void initState() {
+    super.initState();
+    _getDetectionsAndNavigate();
+  }
+
+  Future<void> _getDetectionsAndNavigate() async {
+    try {
+      final fileName = widget.imageFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(
+          widget.imageFile.path,
+          filename: fileName,
+        ),
+        'plant_type': "${widget.plantType.toLowerCase()}",
+      });
+      final response = await dio.post(
+        'https://my-app-154461300822.me-central1.run.app/predict',
+        data: formData,
+      );
+      final result=DetectionResult.fromJson(response.data);
+      final detection = result.detections;
+
+      if (mounted) {
+        if (detection.length>0){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetectionResultScreen(
+                imageFile: widget.imageFile!,
+                results: detection,
+                chosenType: widget.plantType,
+              ),
+            ),
+          );
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("No leaves detected in the given image try uploading another  image"),
+              backgroundColor: Color(0xFF063A23),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(20)
+                ),
+              ),
+              margin: EdgeInsets.all(20),
+              duration: Duration(seconds: 3),
+            ),
+          );
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UploadImageScreen(
+                      chosenType:"${widget.plantType.toLowerCase()}"
+                  )
+              )
+          );
+        }
+
       }
-      else if (index == 1){
-        Navigator.pushNamed(context, '/chatbot');
+    } catch (e) {
+      if (mounted) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UploadImageScreen(
+                    chosenType:"${widget.plantType.toLowerCase()}"
+                )
+            )
+        );
       }
-    },
-  );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg_after.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/logo.png', width: 100),
+              SizedBox(height: 20),
+              Text(
+                "Detecting disease...",
+                style: GoogleFonts.poppins(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 20),
+              CircularProgressIndicator(color: Colors.white),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

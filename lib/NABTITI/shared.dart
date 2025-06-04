@@ -32,6 +32,7 @@ class PreferenceUtils {
   }
 
   static bool getBool(prefKeys key, [bool defValue=false]) {
+    if (_prefsInstance == null) return defValue;
     return _prefsInstance!.getBool(key.name) ?? defValue ;
   }
 

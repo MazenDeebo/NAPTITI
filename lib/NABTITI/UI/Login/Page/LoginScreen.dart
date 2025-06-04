@@ -102,7 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
         joinAsUser();
 
       });
-
+      joinAsUser();
+      print("===============================${PreferenceUtils.getBool(prefKeys.loggedIn)}");
 
       Navigator.pushReplacement(
           context,
@@ -213,32 +214,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 10),
                         _buildButton(context, "Login", _login),
                         const SizedBox(height: 10),
-                        Center(
-                          child: Text.rich(
-                            TextSpan(
-                              text: "Don’t have an account? ",
-                              style: GoogleFonts.poppins(color: Colors.grey),
-                              children: [
-                                TextSpan(
-                                  text: "Register",
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Don’t have an account?",
+                                style: GoogleFonts.poppins(color: Colors.grey)),
+                            TextButton(
+                              onPressed: () => Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) => RegisterScreen(fromLogin: true,))),
+                              child: Text("Register",
                                   style: GoogleFonts.poppins(
-                                    color: const Color(0xFF063A23),
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => RegisterScreen(fromLogin: true,)
-                                        ),
-                                      );
-                                    },
-                                )
-                              ],
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF063A23))),
                             ),
-                          ),
+                          ],
                         ),
                         const SizedBox(height: 20),
 

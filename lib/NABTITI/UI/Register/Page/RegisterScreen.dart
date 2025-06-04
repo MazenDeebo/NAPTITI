@@ -111,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Text("Already have an account?",
                       style: GoogleFonts.poppins(color: Colors.grey)),
                   TextButton(
-                    onPressed: () => Navigator.push(context,
+                    onPressed: () => Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => LoginScreen())),
                     child: Text("Login",
                         style: GoogleFonts.poppins(
@@ -131,7 +131,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _backButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        widget.fromLogin? Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginScreen())):Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingScreen()));
+        widget.fromLogin?
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LoginScreen()))
+            :
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingScreen()));
       },
       child: Container(
         padding: const EdgeInsets.all(10),

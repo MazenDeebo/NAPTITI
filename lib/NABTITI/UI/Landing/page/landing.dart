@@ -114,7 +114,9 @@ Widget _buildLogo() {
 Widget _buildRegisterLink(BuildContext context) {
   return TextButton(
     onPressed: () => Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => RegisterScreen())),
+        context,
+        MaterialPageRoute(builder: (context) => RegisterScreen())
+    ),
     child: Text("Don't have an account ? Sign Up", style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.w700)),
   );
 }

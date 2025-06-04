@@ -1,28 +1,28 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../shared.dart';
+import '../../Landing/page/landing.dart';
+import '../../UploadImage/Page/UploadImageScreen.dart';
+import 'Diseases.dart';
 
 class DetectionResultScreen extends StatelessWidget {
   final File imageFile;
-  final String diseaseName;
-  final String cause;
-  final String organicTreatment;
-  final String chemicalTreatment;
+  final List<Detections> results;
+  final String chosenType;
 
   DetectionResultScreen({
     required this.imageFile,
-    required this.diseaseName,
-    required this.cause,
-    required this.organicTreatment,
-    required this.chemicalTreatment,
+    required this.results,
+    required this.chosenType
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: _buildBottomNavBar(context),
       body: Stack(
         children: [
-          // Background Image
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -31,37 +31,83 @@ class DetectionResultScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Content
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 40),
-                // Display Detected Leaf Image
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Image.file(
-                    imageFile,
-                    height: 200,
-                    width: 300,
-                    fit: BoxFit.cover,
+          results[0].diseaseName=="Healthy"?
+          ListView.builder(
+            itemCount: results.length,
+            itemBuilder:(context,index){
+              Detections disease=results[index];
+              return Column(
+                children: [
+                  SizedBox(height: 90),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Image.file(
+                      imageFile,
+                      height: 200,
+                      width: 300,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                // Title
-                Text(
-                  diseaseName,
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
-                ),
-                SizedBox(height: 20),
+                  SizedBox(height: 20),
+                  Text(
+                    disease.diseaseName,
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
+                  ),
+                  SizedBox(height: 20),
+                  _buildInfoSection("Description:", "no Diseases detected in your plant"),
+                ],
+              );
+            },
+          )
+              :
+          ListView.builder(
+            itemCount: results.length,
+            itemBuilder:(context,index){
+              Detections disease=results[index];
+              return Column(
+                children: [
+                  SizedBox(height: 90),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Image.file(
+                      imageFile,
+                      height: 200,
+                      width: 300,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    disease.diseaseName,
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
+                  ),
+                  SizedBox(height: 20),
+                  _buildInfoSection("Description:", disease.description),
+                  _buildInfoSection("Cause:", disease.cause),
+                  _buildInfoSection("Organic Treatment:", disease.organicTreatmentPlan),
+                  _buildInfoSection("Chemical Treatment:", disease.chemicalTreatmentPlan),
 
-                // Details
-                _buildInfoSection("Cause:", cause),
-                _buildInfoSection("Organic Treatment:", organicTreatment),
-                _buildInfoSection("Chemical Treatment:", chemicalTreatment),
+                ],
+              );
 
-                SizedBox(height: 40),
-              ],
-            ),
+            },
+          ),
+          Column(
+            children: [
+              SizedBox(height: 40,),
+              IconButton(
+                  onPressed: (){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UploadImageScreen(
+                              chosenType: chosenType,
+                            ),
+                        )
+                    );
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white)),
+            ],
           ),
         ],
       ),
@@ -77,7 +123,7 @@ class DetectionResultScreen extends StatelessWidget {
           text: TextSpan(
             style: TextStyle(color: Colors.black87, fontSize: 20),
             children: [
-              TextSpan(text: '$title\n', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 29)),
+              TextSpan(text: '$title\n', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white60, fontSize: 29)),
               TextSpan(text: content),
             ],
           ),
@@ -85,23 +131,4 @@ class DetectionResultScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _buildBottomNavBar(BuildContext context) {
-  return BottomNavigationBar(
-    backgroundColor: Colors.green[800],
-    selectedItemColor: Colors.white,
-    unselectedItemColor: Colors.white70,
-    items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
-    ],
-    onTap: (index) {
-      if (index == 0) {
-        Navigator.pushNamed(context, '/home');
-      } else if (index == 1) {
-        Navigator.pushNamed(context, '/chatbot');
-      }
-    },
-  );
 }

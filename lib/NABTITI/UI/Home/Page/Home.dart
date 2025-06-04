@@ -1,14 +1,19 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../shared.dart';
 import '../../Landing/page/landing.dart';
+import '../../UploadImage/Page/UploadImageScreen.dart';
 
 void saveLogout() async{
   PreferenceUtils.setBool(prefKeys.loggedIn,false);
 }
-
 class Home extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +31,11 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
-
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min, // Keeps the column compact
               children: [
+                SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
@@ -51,35 +56,26 @@ class Home extends StatelessWidget {
                     children: plantList.map((plant) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/upload',
-                                arguments: plant['name'],
-                              );
-                            },
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  image: AssetImage(plant['image'] ?? 'assets/default.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                padding: EdgeInsets.all(10),
+                        child: InkWell(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            Navigator.pushReplacement(
+                                context, MaterialPageRoute(
+                                builder: (context) => UploadImageScreen(chosenType:"${plant["name"]}")
+                            )
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(15),
+                          child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(plant['image'] ?? 'assets/default.jpg'),
+                                fit: BoxFit.cover,
                               ),
                             ),
+                            alignment: Alignment.center,
                           ),
                         ),
                       );
@@ -94,7 +90,11 @@ class Home extends StatelessWidget {
     );
   }
 }
-
+final List<Map<String, String>> plantList = [
+  {"name": "tomato", "image": "assets/tomato.png"},
+  {"name": "potato", "image": "assets/potato.png"},
+  {"name": "wheat", "image": "assets/wheat.png"},
+];
 
 Widget _buildBottomNavBar(BuildContext context) {
   return BottomNavigationBar(
@@ -105,38 +105,47 @@ Widget _buildBottomNavBar(BuildContext context) {
     items: [
       BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
       BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
-      BottomNavigationBarItem(icon: Icon(Icons.logout), label: "LogOut"),
+      BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Exit"),
     ],
     onTap: (index) {
+      print("==========================${PreferenceUtils.getBool(prefKeys.loggedIn)}");
         if (index == 0) {
           //Navigator.pushNamed(context, '/home');
         }
         else if (index == 1){
           if (PreferenceUtils.getBool(prefKeys.loggedIn) == false){
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Log in to use the chat bot")),
+              SnackBar(
+                content: Text("You need to Log in to use the chat bot"),
+                backgroundColor: Color(0xFF063A23),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(20)
+                  ),
+                ),
+                margin: EdgeInsets.all(20),
+                duration: Duration(seconds: 3),
+              ),
             );
           }
           else{
-            Navigator.pushNamed(context, '/chatbot');
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            Navigator.pushReplacementNamed(context, '/chatbot');
           }
         }
         else if (index == 2){
           saveLogout();
           FirebaseAuth.instance.signOut();
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context)=> LandingScreen())
           );
         }
     },
+
   );
+
 }
-
-
-final List<Map<String, String>> plantList = [
-  {"name": "Tomato", "image": "assets/tomato.png"},
-  {"name": "Potato", "image": "assets/potato.png"},
-  {"name": "Wheat", "image": "assets/wheat.png"},
-];
 

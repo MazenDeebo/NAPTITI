@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../Home/Page/Home.dart';
 import '../providers/chat_provider.dart';
 import '../widgets/chat_bubble.dart';
 
@@ -13,7 +14,20 @@ class ChatPage extends ConsumerWidget {
 
     return Scaffold(
 
-      appBar: AppBar(title: Text('AI Chat')),
+      appBar: AppBar(
+        title: Text('AI Chat'),
+        leading: IconButton(
+            onPressed: (){
+              // print("===============${chosenType}");
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Home()
+                  )
+              );
+            },
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black)),
+      ),
       body: Column(
         children: [
           Expanded(

@@ -8,12 +8,14 @@ import 'NABTITI/UI/ChatBot/Page/core/di/service_locator.dart';
 import 'NABTITI/UI/ChatBot/Page/presentation/pages/chat_page.dart';
 import 'NABTITI/UI/Home/Page/Home.dart';
 import 'NABTITI/UI/UploadImage/Page/UploadImageScreen.dart';
+import 'NABTITI/shared.dart';
 
 
 void main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await PreferenceUtils.init();
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -24,10 +26,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       routes: {
-        '/upload': (context) => UploadImageScreen(),
         '/home': (context) => Home(),
         '/chatbot': (context) => ChatPage(),
-
       },
     );
   }
@@ -54,14 +54,20 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     ;
     Timer(const Duration(seconds: 7), () {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => FirebaseAuth.instance.currentUser==null? LoginScreen():Home()),
-      // );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LandingScreen()),
-      );
+
+      print("==========================${PreferenceUtils.getBool(prefKeys.loggedIn)}");
+      if (!PreferenceUtils.getBool(prefKeys.loggedIn)) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LandingScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => PostLoginSplashScreen()),
+        );
+      }
+
     });
   }
   @override
@@ -104,6 +110,7 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
       if (mounted) {
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LandingScreen()),
@@ -149,7 +156,7 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
 
 
 
-// 🔹 Post login
+
 class PostLoginSplashScreen extends StatefulWidget {
   @override
   _PostLoginSplashScreenState createState() => _PostLoginSplashScreenState();
