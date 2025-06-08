@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../generated/l10n.dart';
 import '../../../shared.dart';
 import '../../Landing/page/landing.dart';
 import '../../UploadImage/Page/UploadImageScreen.dart';
@@ -31,7 +33,7 @@ class DetectionResultScreen extends StatelessWidget {
               ),
             ),
           ),
-          results[0].diseaseName=="Healthy"?
+          results[0].diseaseName==S().healthy?
           ListView.builder(
             itemCount: results.length,
             itemBuilder:(context,index){
@@ -50,11 +52,11 @@ class DetectionResultScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    disease.diseaseName,
+                    PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
                   ),
                   SizedBox(height: 20),
-                  _buildInfoSection("Description:", "no Diseases detected in your plant"),
+                  _buildInfoSection(S().description, S().noDetection),
                 ],
               );
             },
@@ -78,18 +80,30 @@ class DetectionResultScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    disease.diseaseName,
+                    PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
                   ),
                   SizedBox(height: 20),
-                  _buildInfoSection("Description:", disease.description),
-                  _buildInfoSection("Cause:", disease.cause),
-                  _buildInfoSection("Organic Treatment:", disease.organicTreatmentPlan),
-                  _buildInfoSection("Chemical Treatment:", disease.chemicalTreatmentPlan),
+
+                  _buildInfoSection(S().description,PreferenceUtils.getString(prefKeys.language)=="en"? disease.descriptionEnglish:disease.description),
+
+                  PreferenceUtils.getBool(prefKeys.loggedIn)?
+                  _buildInfoSection(S().cause,PreferenceUtils.getString(prefKeys.language)=="en"? disease.causeEnglish:disease.cause)
+                      :
+                  _blurredInfoSection(S().cause),
+
+                  PreferenceUtils.getBool(prefKeys.loggedIn)?
+                  _buildInfoSection(S().organicTreatment,PreferenceUtils.getString(prefKeys.language)=="en"? disease.organicTreatmentPlanEnglish:disease.organicTreatmentPlan)
+                      :
+                  _blurredInfoSection(S().organicTreatment),
+
+                  PreferenceUtils.getBool(prefKeys.loggedIn)?
+                  _buildInfoSection(S().chemicalTreatment,PreferenceUtils.getString(prefKeys.language)=="en"? disease.chemicalTreatmentPlanEnglish:disease.chemicalTreatmentPlan)
+                      :
+                  _blurredInfoSection(S().chemicalTreatment),
 
                 ],
               );
-
             },
           ),
           Column(
@@ -128,6 +142,57 @@ class DetectionResultScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+  Widget _blurredInfoSection(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$title",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white60,
+              fontSize: 29,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Stack(
+            children: [
+              Container(
+                height: 80,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.withOpacity(0.2),
+                ),
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    height: 80,
+                    width: double.infinity,
+                    color: Colors.black.withOpacity(0.3),
+                    alignment: Alignment.center,
+                    child: Text(
+                      S().loginToView,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

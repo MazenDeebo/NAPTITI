@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../generated/l10n.dart';
 import '../../../shared.dart';
 import '../../DetectionResult/Page/DetectionResultScreen.dart';
 import '../../DetectionResult/Page/Diseases.dart';
@@ -78,7 +79,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "Take an Image",
+                  S().takeImage,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -126,7 +127,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                     ),
                     minimumSize: Size(180, 50),
                   ),
-                  child: Text("pick Image", style: TextStyle(color: Colors.white)),
+                  child: Text(S().pickImage, style: TextStyle(color: Colors.white)),
                 ),
                 SizedBox(height: 15),
                 ElevatedButton(
@@ -146,7 +147,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                     else{
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("take or pick an image first"),
+                          content: Text(S().TPImageFirst),
                           backgroundColor: Color(0xFF063A23),
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(
@@ -167,7 +168,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                     ),
                     minimumSize: Size(180, 50),
                   ),
-                  child: Text("Detect Diseases", style: TextStyle(color: Colors.white)),
+                  child: Text(S().detectDiseases, style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -239,6 +240,7 @@ class _PostDetectionResultScreenState extends State<PostDetectionResultScreen> {
   }
 
   Future<void> _getDetectionsAndNavigate() async {
+
     try {
       final fileName = widget.imageFile.path.split('/').last;
       FormData formData = FormData.fromMap({
@@ -271,7 +273,7 @@ class _PostDetectionResultScreenState extends State<PostDetectionResultScreen> {
         else{
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("No leaves detected in the given image try uploading another  image"),
+              content: Text(S().noleaves),
               backgroundColor: Color(0xFF063A23),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -292,10 +294,10 @@ class _PostDetectionResultScreenState extends State<PostDetectionResultScreen> {
               )
           );
         }
-
       }
     } catch (e) {
       if (mounted) {
+        print(e);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -325,7 +327,7 @@ class _PostDetectionResultScreenState extends State<PostDetectionResultScreen> {
               Image.asset('assets/logo.png', width: 100),
               SizedBox(height: 20),
               Text(
-                "Detecting disease...",
+                S().detecting,
                 style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

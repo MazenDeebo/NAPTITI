@@ -5,10 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum prefKeys{
   userDta,
   loggedIn,
-  language,
-  theme,
-  apiToken,
-  fromLogin
+  language
 }
 
 class PreferenceUtils {

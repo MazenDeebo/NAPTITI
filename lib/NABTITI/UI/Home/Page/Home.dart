@@ -1,19 +1,15 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
+import '../../../../generated/l10n.dart';
 import '../../../shared.dart';
-import '../../Landing/page/landing.dart';
+import '../../Settings/page/settings.dart';
 import '../../UploadImage/Page/UploadImageScreen.dart';
 
 void saveLogout() async{
   PreferenceUtils.setBool(prefKeys.loggedIn,false);
 }
-class Home extends StatelessWidget {
 
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,13 +29,16 @@ class Home extends StatelessWidget {
           ),
           Center(
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Keeps the column compact
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
-                    "Select the desired plant",
+                    PreferenceUtils.getString(prefKeys.language)=="en"?
+                    "Select the desired plant"
+                        :
+                    "اختر نوع النبات",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -49,7 +48,6 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-
                 SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +66,7 @@ class Home extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           child: Container(
                             width: 200,
-                            height: 200,
+                            height: 190,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage(plant['image'] ?? 'assets/default.jpg'),
@@ -91,9 +89,9 @@ class Home extends StatelessWidget {
   }
 }
 final List<Map<String, String>> plantList = [
-  {"name": "tomato", "image": "assets/tomato.png"},
-  {"name": "potato", "image": "assets/potato.png"},
-  {"name": "wheat", "image": "assets/wheat.png"},
+  {"name": "Tomato", "image": "assets/tomato.png"},
+  {"name": "Potato", "image": "assets/potato.png"},
+  {"name": "Wheat", "image": "assets/wheat.png"},
 ];
 
 Widget _buildBottomNavBar(BuildContext context) {
@@ -103,9 +101,9 @@ Widget _buildBottomNavBar(BuildContext context) {
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.grey,
     items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-      BottomNavigationBarItem(icon: Icon(Icons.chat), label: "ChatBot"),
-      BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Exit"),
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: S().home),
+      BottomNavigationBarItem(icon: Icon(Icons.chat), label: S().chatbot),
+      BottomNavigationBarItem(icon: Icon(Icons.settings), label: S().setting),
     ],
     onTap: (index) {
       print("==========================${PreferenceUtils.getBool(prefKeys.loggedIn)}");
@@ -116,7 +114,7 @@ Widget _buildBottomNavBar(BuildContext context) {
           if (PreferenceUtils.getBool(prefKeys.loggedIn) == false){
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("You need to Log in to use the chat bot"),
+                content: Text(S().guestChatMessage),
                 backgroundColor: Color(0xFF063A23),
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
@@ -135,12 +133,9 @@ Widget _buildBottomNavBar(BuildContext context) {
           }
         }
         else if (index == 2){
-          saveLogout();
-          FirebaseAuth.instance.signOut();
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
           Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context)=> LandingScreen())
+              MaterialPageRoute(builder: (context)=> Settings())
           );
         }
     },

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+import '../../../../generated/l10n.dart';
 import '../../../shared.dart';
 import '../../Home/Page/Home.dart';
 import '../../Login/Page/LoginScreen.dart';
@@ -15,6 +17,7 @@ void joinAsGuest() async{
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +26,23 @@ class _LandingScreenState extends State<LandingScreen> {
         children: [
           _buildBackground(),
           Center(
-            child: SingleChildScrollView(
+            child:_isLoading?
+            const CircularProgressIndicator(color: Colors.white)
+                :
+            SingleChildScrollView(
               child: Column(
                 children: [
                   _buildLogo(),
-                  Text("A Step Towards\nLess Plants \nDisease.",
+                  Text(PreferenceUtils.getString(prefKeys.language)=="en"?
+                      "A Step Towards\nLess Plants \nDisease."
+                          :
+                      "خطوة\nلتقليل الامراض \nالنباتيه",
                       style: GoogleFonts.poppins(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                   const SizedBox(height: 20),
 
-                  //_buildButton(context, "Login", _login),
                   Container(
                     width: 300,
                     height: 50,
@@ -43,8 +51,8 @@ class _LandingScreenState extends State<LandingScreen> {
                           backgroundColor: Colors.grey.withOpacity(0.5),
                           shadowColor: Colors.transparent
                       ),
-                      child: Text('Login',style: TextStyle(color: Colors.white),),
-                      onPressed: () {
+                      child: Text(S().login,style: TextStyle(color: Colors.white),),
+                      onPressed: (){
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -56,18 +64,36 @@ class _LandingScreenState extends State<LandingScreen> {
                   _buildRegisterLink(context),
                   SizedBox(height: 20,),
                   TextButton(
-                    onPressed: () {
-                      //joining as guest
+                    onPressed: () async {
+                      setState(() => _isLoading = true); // Start loading
                       joinAsGuest();
-                      Navigator.pushReplacement(
+                      bool w = await checkInternetConnection();
+                      setState(() => _isLoading = false); // Stop loading
+                      if (w) {
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                              builder: (context)=> Home()
-                          )
-                      );
+                          MaterialPageRoute(builder: (context) => Home()),
+                        );
+                      }
+                      else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(S().connectionMessage),
+                            backgroundColor: const Color(0xFF063A23),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                            ),
+                            margin: const EdgeInsets.all(20),
+                            duration: const Duration(seconds: 3),
+                          ),
+                        );
+                      }
                     },
-                    child: Text("Continuo as a guest ", style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.w700)),
-                  )
+                    child: Text(S().guestMessage,
+                        style: GoogleFonts.poppins(
+                            color: Colors.white, fontWeight: FontWeight.w700)),
+                  ),
                 ],
               ),
             ),
@@ -110,14 +136,19 @@ Widget _buildLogo() {
   );
 }
 
-
 Widget _buildRegisterLink(BuildContext context) {
   return TextButton(
-    onPressed: () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => RegisterScreen())
-    ),
-    child: Text("Don't have an account ? Sign Up", style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.w700)),
+    onPressed: ()  {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterScreen())
+      );
+    },
+    child: Text(S().registerMessage, style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.w700)),
   );
 }
 
+Future<bool> checkInternetConnection() async{
+  bool hasConnection = await InternetConnectionChecker.instance.hasConnection;
+  return hasConnection;
+}

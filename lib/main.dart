@@ -1,14 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nabtiti/NABTITI/UI/Landing/page/landing.dart';
+import 'package:nabtiti/NABTITI/manager/app_cubit.dart';
+import 'package:nabtiti/NABTITI/manager/app_cubit.dart';
 import 'NABTITI/UI/ChatBot/Page/core/di/service_locator.dart';
 import 'NABTITI/UI/ChatBot/Page/presentation/pages/chat_page.dart';
 import 'NABTITI/UI/Home/Page/Home.dart';
-import 'NABTITI/UI/UploadImage/Page/UploadImageScreen.dart';
 import 'NABTITI/shared.dart';
+import 'generated/l10n.dart';
 
 
 void main() async {
@@ -22,18 +27,32 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
-      routes: {
-        '/home': (context) => Home(),
-        '/chatbot': (context) => ChatPage(),
-      },
+    return BlocProvider(
+      create: (context) => AppCubit(),
+      child: BlocBuilder<AppCubit, AppState>(
+        builder: (context, state) {
+          return MaterialApp(
+            locale: Locale(PreferenceUtils.getString(prefKeys.language, 'ar')),
+            supportedLocales: S.delegate.supportedLocales,
+            localizationsDelegates: const[
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate
+            ],
+            debugShowCheckedModeBanner: false,
+            home: SplashScreen(),
+            routes: {
+              '/home': (context) => Home(),
+              '/chatbot': (context) => ChatPage(),
+            },
+          );
+        },
+      ),
     );
   }
 }
 
-// 🔹 SPLASH SCREEN WITH ANIMATION
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -54,8 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     ;
     Timer(const Duration(seconds: 7), () {
-
-      print("==========================${PreferenceUtils.getBool(prefKeys.loggedIn)}");
+      print("==========================${PreferenceUtils.getBool(
+          prefKeys.loggedIn)}");
       if (!PreferenceUtils.getBool(prefKeys.loggedIn)) {
         Navigator.pushReplacement(
           context,
@@ -67,9 +86,9 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (context) => PostLoginSplashScreen()),
         );
       }
-
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,9 +115,6 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 
-
-
-// 🔹 Post register
 class PostRegisterScreen extends StatefulWidget {
   @override
   _PostRegisterScreenState createState() => _PostRegisterScreenState();
@@ -110,7 +126,6 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
       if (mounted) {
-
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LandingScreen()),
@@ -133,10 +148,11 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logo.png', width: 100), // Ensure this exists
+              Image.asset('assets/logo.png', width: 100),
+              // Ensure this exists
               SizedBox(height: 20),
               Text(
-                "Thanks for joining us!",
+                S().thankYou,
                 style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -144,7 +160,8 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              CircularProgressIndicator(color: Colors.white), // Ensure visibility
+              CircularProgressIndicator(color: Colors.white),
+              // Ensure visibility
             ],
           ),
         ),
@@ -152,9 +169,6 @@ class _PostRegisterScreenState extends State<PostRegisterScreen> {
     );
   }
 }
-
-
-
 
 
 class PostLoginSplashScreen extends StatefulWidget {
@@ -191,10 +205,10 @@ class _PostLoginSplashScreenState extends State<PostLoginSplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logo.png', width: 100), // Ensure this exists
+              Image.asset('assets/logo.png', width: 100),
               SizedBox(height: 20),
               Text(
-                "Hi! Welcome back",
+                S().welcomeBack,
                 style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -202,7 +216,8 @@ class _PostLoginSplashScreenState extends State<PostLoginSplashScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              CircularProgressIndicator(color: Colors.white), // Ensure visibility
+              CircularProgressIndicator(color: Colors.white),
+              // Ensure visibility
             ],
           ),
         ),
@@ -210,3 +225,4 @@ class _PostLoginSplashScreenState extends State<PostLoginSplashScreen> {
     );
   }
 }
+

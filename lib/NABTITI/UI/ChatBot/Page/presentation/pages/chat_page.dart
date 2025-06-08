@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../../generated/l10n.dart';
 import '../../../../Home/Page/Home.dart';
 import '../providers/chat_provider.dart';
 import '../widgets/chat_bubble.dart';
@@ -8,17 +9,19 @@ import '../widgets/chat_bubble.dart';
 class ChatPage extends ConsumerWidget {
   final TextEditingController _controller = TextEditingController();
 
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    int c=0;
     final messages = ref.watch(chatProvider);
 
     return Scaffold(
 
       appBar: AppBar(
-        title: Text('AI Chat'),
+        title: Text(S().AIChat),
         leading: IconButton(
             onPressed: (){
-              // print("===============${chosenType}");
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -47,7 +50,7 @@ class ChatPage extends ConsumerWidget {
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
-                      hintText: "Type a message...",
+                      hintText: S().typeMessage,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -57,10 +60,8 @@ class ChatPage extends ConsumerWidget {
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    if (_controller.text.isNotEmpty) {
-                      ref.read(chatProvider.notifier).sendMessage(_controller.text);
-                      _controller.clear();
-                    }
+                    ref.read(chatProvider.notifier).sendMessage(_controller.text);
+                    _controller.clear();
                   },
                 )
               ],

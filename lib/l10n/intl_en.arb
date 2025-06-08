@@ -1,0 +1,64 @@
+{
+  "login": "Log In",
+  "registerMessage": "Don't have an account ? Sign Up",
+  "guestMessage": "Continue as a guest",
+  "connectionMessage": "Device is not connected to the internet",
+
+
+  "thankYou": "Thanks for joining us!",
+
+
+  "name": "Name",
+  "email": "E-mail",
+  "password": "Password",
+  "welcomeBack": "Welcome Back!",
+  "register": "Register",
+
+  "send": "Send",
+
+  "hi": "Hi",
+  "repeatPassword": "Repeat your Password",
+  "signUp": "Sign Up",
+
+
+  "setting": "Settings",
+  "language": "Language",
+  "select": "Select",
+  "logout": "Log Out",
+  "change": "Change",
+
+
+
+  "home": "Home",
+  "chatbot": "ChatBot",
+  "profile": "Profile",
+  "guestChatMessage":"You need to Log in to use the chat bot",
+
+
+
+  "takeImage": "Take an Image",
+  "pickImage": "Pick Image",
+  "TPImageFirst": "take or pick an image first",
+  "detectDiseases": "Detect Diseases",
+  "noleaves":"No leaves detected in the given image try uploading another  image",
+  "detecting":"Detecting disease...",
+
+  "healthy": "Healthy",
+  "description": "Description:",
+  "noDetection": "no Diseases detected in your plant",
+  "cause": "Cause:",
+  "organicTreatment": "Organic Treatment:",
+  "chemicalTreatment": "Chemical Treatment:",
+  "loginToView": "Login to view",
+
+
+  "AIChat": "AI Chat",
+  "typeMessage": "Type a message...",
+  "noResponse": "Sorry, I was unable to provide a response. Please try again.",
+  "exit": "Exit",
+
+
+
+  "arabic": "Arabic",
+  "english": "English"
+}
