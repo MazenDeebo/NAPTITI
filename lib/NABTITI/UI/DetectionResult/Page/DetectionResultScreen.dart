@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../shared.dart';
-import '../../Landing/page/landing.dart';
 import '../../UploadImage/Page/UploadImageScreen.dart';
 import 'Diseases.dart';
 
@@ -83,7 +81,6 @@ class DetectionResultScreen extends StatelessWidget {
                     PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
                   ),
-                  SizedBox(height: 20),
 
                   _buildInfoSection(S().description,PreferenceUtils.getString(prefKeys.language)=="en"? disease.descriptionEnglish:disease.description),
 
@@ -132,7 +129,7 @@ class DetectionResultScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.topRight,
         child: RichText(
           text: TextSpan(
             style: TextStyle(color: Colors.black87, fontSize: 20),

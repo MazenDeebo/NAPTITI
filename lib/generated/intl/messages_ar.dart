@@ -60,7 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noleaves": MessageLookupByLibrary.simpleMessage(
             "لم يتم اكتشاف أي أوراق في الصورة المقدمة، حاول تحميل صورة أخرى"),
         "organicTreatment":
-            MessageLookupByLibrary.simpleMessage("طرق علاج عضويه:"),
+            MessageLookupByLibrary.simpleMessage("طرق علاج عضوية:"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "pickImage": MessageLookupByLibrary.simpleMessage("اختر صورة"),
         "profile": MessageLookupByLibrary.simpleMessage("الحساب"),
