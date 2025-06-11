@@ -63,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Organic Treatment:"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "pickImage": MessageLookupByLibrary.simpleMessage("Pick Image"),
+        "potato": MessageLookupByLibrary.simpleMessage("Potato"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "registerMessage": MessageLookupByLibrary.simpleMessage(
@@ -76,8 +77,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "takeImage": MessageLookupByLibrary.simpleMessage("Take an Image"),
         "thankYou":
             MessageLookupByLibrary.simpleMessage("Thanks for joining us!"),
+        "tomato": MessageLookupByLibrary.simpleMessage("Tomato"),
         "typeMessage":
             MessageLookupByLibrary.simpleMessage("Type a message..."),
-        "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome Back!")
+        "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome Back!"),
+        "wheat": MessageLookupByLibrary.simpleMessage("Wheat")
       };
 }

@@ -410,6 +410,36 @@ class S {
     );
   }
 
+  /// `Tomato`
+  String get tomato {
+    return Intl.message(
+      'Tomato',
+      name: 'tomato',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Potato`
+  String get potato {
+    return Intl.message(
+      'Potato',
+      name: 'potato',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wheat`
+  String get wheat {
+    return Intl.message(
+      'Wheat',
+      name: 'wheat',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `AI Chat`
   String get AIChat {
     return Intl.message(

@@ -54,6 +54,10 @@
   "chemicalTreatment": "طرق علاج كيميائية:",
   "loginToView": "تسجيل الدخول للعرض",
 
+  "tomato": "طماطم",
+  "potato": "بطاطس",
+  "wheat": "قمح",
+
 
   "AIChat": "روبوت دردشة",
   "typeMessage": "اكتب رسالة...",

@@ -52,6 +52,11 @@
   "loginToView": "Login to view",
 
 
+  "tomato": "Tomato",
+  "potato": "Potato",
+  "wheat": "Wheat",
+
+
   "AIChat": "AI Chat",
   "typeMessage": "Type a message...",
   "noResponse": "Sorry, I was unable to provide a response. Please try again.",

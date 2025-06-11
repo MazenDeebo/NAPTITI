@@ -63,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("طرق علاج عضوية:"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "pickImage": MessageLookupByLibrary.simpleMessage("اختر صورة"),
+        "potato": MessageLookupByLibrary.simpleMessage("بطاطس"),
         "profile": MessageLookupByLibrary.simpleMessage("الحساب"),
         "register": MessageLookupByLibrary.simpleMessage("تسجيل"),
         "registerMessage":
@@ -76,7 +77,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "takeImage": MessageLookupByLibrary.simpleMessage("التقط صورة"),
         "thankYou":
             MessageLookupByLibrary.simpleMessage("شكرا لانضمامك إلينا!"),
+        "tomato": MessageLookupByLibrary.simpleMessage("طماطم"),
         "typeMessage": MessageLookupByLibrary.simpleMessage("اكتب رسالة..."),
-        "welcomeBack": MessageLookupByLibrary.simpleMessage("مرحبًا بعودتك!")
+        "welcomeBack": MessageLookupByLibrary.simpleMessage("مرحبًا بعودتك!"),
+        "wheat": MessageLookupByLibrary.simpleMessage("قمح")
       };
 }
