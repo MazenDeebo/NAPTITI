@@ -16,58 +16,67 @@ class ChatPage extends ConsumerWidget {
     int c=0;
     final messages = ref.watch(chatProvider);
 
-    return Scaffold(
-
-      appBar: AppBar(
-        title: Text(S().AIChat),
-        leading: IconButton(
-            onPressed: (){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Home()
-                  )
-              );
-            },
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black)),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return ChatBubble(message: messages[index]);
+    return WillPopScope(
+      onWillPop: () async {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+        return false; // Prevent default back action
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(S().AIChat),
+          leading: IconButton(
+              onPressed: (){
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Home()
+                    )
+                );
               },
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black)),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.all(10),
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return ChatBubble(message: messages[index]);
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: S().typeMessage,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: S().typeMessage,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    ref.read(chatProvider.notifier).sendMessage(_controller.text);
-                    _controller.clear();
-                  },
-                )
-              ],
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () {
+                      ref.read(chatProvider.notifier).sendMessage(_controller.text);
+                      _controller.clear();
+                    },
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

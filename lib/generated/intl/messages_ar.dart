@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "TPImageFirst":
             MessageLookupByLibrary.simpleMessage("التقط أو اختر صورة أولاً"),
         "arabic": MessageLookupByLibrary.simpleMessage("العريبه"),
+        "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "cause": MessageLookupByLibrary.simpleMessage("سبب المرض:"),
         "change": MessageLookupByLibrary.simpleMessage("تغيير"),
         "chatbot": MessageLookupByLibrary.simpleMessage("روبوت دردشة"),

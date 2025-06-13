@@ -22,51 +22,61 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(S().setting),
-        elevation: 0,
-        leading: IconButton(
-            onPressed: (){
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Home()
-                  )
-              );
-            },
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black)),
-      ),
-      body: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              settingItem(
-                onTap: (){
-                  showChangeLanguageBottomSheet();
-                },
-                icon: Icons.language_rounded,
-                title: S().language,
-                value: PreferenceUtils.getString(prefKeys.language,'ar'),
-              ),
-              settingItem(
-                onTap: (){
-                  saveLogout();
-                  FirebaseAuth.instance.signOut();
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context)=> LandingScreen())
-                  );
-                },
-                icon: Icons.logout,
-                title: PreferenceUtils.getBool(prefKeys.loggedIn)?S().logout:S().exit,
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+        return false; // Prevent default back action
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(S().setting),
+          elevation: 0,
+          leading: IconButton(
+              onPressed: (){
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Home()
+                    )
+                );
+              },
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black)),
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                settingItem(
+                  onTap: (){
+                    showChangeLanguageBottomSheet();
+                  },
+                  icon: Icons.language_rounded,
+                  title: S().language,
+                  value: PreferenceUtils.getString(prefKeys.language,'ar'),
+                ),
+                settingItem(
+                  onTap: (){
+                    saveLogout();
+                    FirebaseAuth.instance.signOut();
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context)=> LandingScreen())
+                    );
+                  },
+                  icon: Icons.logout,
+                  title: PreferenceUtils.getBool(prefKeys.loggedIn)?S().logout:S().exit,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -117,6 +127,7 @@ class _SettingsState extends State<Settings> {
           return Container(
             height: 160,
             decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(25)
             ),
             child: Center(
@@ -124,7 +135,6 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-
                   Text(
                     "${S().select} ${S().language}",
                     style: TextStyle(

@@ -45,135 +45,145 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/bg_after.png'), // Background image
-                fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () async {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+        return false; // Prevent default back action
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bg_after.png'), // Background image
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Column(
-            children: [
-              SizedBox(height: 40,),
-              IconButton(
-                  onPressed: (){
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Home()
-                        )
-                    );
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white)),
-            ],
-          ),
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            Column(
               children: [
-                Text(
-                  S().takeImage,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 20),
-                GestureDetector(
-                  onTap: _takeImage,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: CustomPaint(
-                          painter: DashedCirclePainter(),
-                        ),
-                      ),
-                      if (_selectedImage != null)
-                        ClipOval(
-                          child: Image.file(
-                            _selectedImage!,
-                            width: 180,
-                            height: 180,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      else
-                        Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 50,
-                        ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF063A23),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    minimumSize: Size(180, 50),
-                  ),
-                  child: Text(S().pickImage, style: TextStyle(color: Colors.white)),
-                ),
-                SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_selectedImage != null) {
+                SizedBox(height: 40,),
+                IconButton(
+                    onPressed: (){
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostDetectionResultScreen(
-                            imageFile: _selectedImage!,
-                            plantType: widget.chosenType.toLowerCase(),
-                          ),
-                        ),
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Home()
+                          )
                       );
-                    }
-                    else{
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(S().TPImageFirst),
-                          backgroundColor: Color(0xFF063A23),
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(20)
-                            ),
-                          ),
-                          margin: EdgeInsets.all(20),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF063A23),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    minimumSize: Size(180, 50),
-                  ),
-                  child: Text(S().detectDiseases, style: TextStyle(color: Colors.white)),
-                ),
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white)),
               ],
             ),
-          ),
-        ],
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    S().takeImage,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: _takeImage,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: CustomPaint(
+                            painter: DashedCirclePainter(),
+                          ),
+                        ),
+                        if (_selectedImage != null)
+                          ClipOval(
+                            child: Image.file(
+                              _selectedImage!,
+                              width: 180,
+                              height: 180,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        else
+                          Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 50,
+                          ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _pickImage,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF063A23),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      minimumSize: Size(180, 50),
+                    ),
+                    child: Text(S().pickImage, style: TextStyle(color: Colors.white)),
+                  ),
+                  SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_selectedImage != null) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostDetectionResultScreen(
+                              imageFile: _selectedImage!,
+                              plantType: widget.chosenType.toLowerCase(),
+                            ),
+                          ),
+                        );
+                      }
+                      else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(S().TPImageFirst),
+                            backgroundColor: Color(0xFF063A23),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(20)
+                              ),
+                            ),
+                            margin: EdgeInsets.all(20),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF063A23),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      minimumSize: Size(180, 50),
+                    ),
+                    child: Text(S().detectDiseases, style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

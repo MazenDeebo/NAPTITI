@@ -20,107 +20,121 @@ class DetectionResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/bg_after.png'),
-                fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () async {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UploadImageScreen(
+                chosenType: chosenType,
+              ),
+            )
+        );
+        return false; // Prevent default back action
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bg_after.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          results[0].diseaseName==S().healthy?
-          ListView.builder(
-            itemCount: results.length,
-            itemBuilder:(context,index){
-              Detections disease=results[index];
-              return Column(
-                children: [
-                  SizedBox(height: 90),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Image.file(
-                      imageFile,
-                      height: 200,
-                      width: 300,
-                      fit: BoxFit.cover,
+            results[0].diseaseName==S().healthy?
+            ListView.builder(
+              itemCount: results.length,
+              itemBuilder:(context,index){
+                Detections disease=results[index];
+                return Column(
+                  children: [
+                    SizedBox(height: 90),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Image.file(
+                        imageFile,
+                        height: 200,
+                        width: 300,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
-                  ),
-                  SizedBox(height: 20),
-                  _buildInfoSection(S().description, S().noDetection),
-                ],
-              );
-            },
-          )
-              :
-          ListView.builder(
-            itemCount: results.length,
-            itemBuilder:(context,index){
-              Detections disease=results[index];
-              return Column(
-                children: [
-                  SizedBox(height: 90),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Image.file(
-                      imageFile,
-                      height: 200,
-                      width: 300,
-                      fit: BoxFit.cover,
+                    SizedBox(height: 20),
+                    Text(
+                      PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
-                  ),
-
-                  _buildInfoSection(S().description,PreferenceUtils.getString(prefKeys.language)=="en"? disease.descriptionEnglish:disease.description),
-
-                  PreferenceUtils.getBool(prefKeys.loggedIn)?
-                  _buildInfoSection(S().cause,PreferenceUtils.getString(prefKeys.language)=="en"? disease.causeEnglish:disease.cause)
-                      :
-                  _blurredInfoSection(S().cause),
-
-                  PreferenceUtils.getBool(prefKeys.loggedIn)?
-                  _buildInfoSection(S().organicTreatment,PreferenceUtils.getString(prefKeys.language)=="en"? disease.organicTreatmentPlanEnglish:disease.organicTreatmentPlan)
-                      :
-                  _blurredInfoSection(S().organicTreatment),
-
-                  PreferenceUtils.getBool(prefKeys.loggedIn)?
-                  _buildInfoSection(S().chemicalTreatment,PreferenceUtils.getString(prefKeys.language)=="en"? disease.chemicalTreatmentPlanEnglish:disease.chemicalTreatmentPlan)
-                      :
-                  _blurredInfoSection(S().chemicalTreatment),
-
-                ],
-              );
-            },
-          ),
-          Column(
-            children: [
-              SizedBox(height: 40,),
-              IconButton(
-                  onPressed: (){
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UploadImageScreen(
-                              chosenType: chosenType,
-                            ),
-                        )
-                    );
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white)),
-            ],
-          ),
-        ],
+                    SizedBox(height: 20),
+                    _buildInfoSection(S().description, S().noDetection),
+                  ],
+                );
+              },
+            )
+                :
+            ListView.builder(
+              itemCount: results.length,
+              itemBuilder:(context,index){
+                Detections disease=results[index];
+                return Column(
+                  children: [
+                    SizedBox(height: 90),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Image.file(
+                        imageFile,
+                        height: 200,
+                        width: 300,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      PreferenceUtils.getString(prefKeys.language)=="en"?disease.diseaseName:disease.diseaseNameArabic,
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900, color: Colors.white60),
+                    ),
+      
+                    _buildInfoSection(S().description,PreferenceUtils.getString(prefKeys.language)=="en"? disease.descriptionEnglish:disease.description),
+      
+                    PreferenceUtils.getBool(prefKeys.loggedIn)?
+                    _buildInfoSection(S().cause,PreferenceUtils.getString(prefKeys.language)=="en"? disease.causeEnglish:disease.cause)
+                        :
+                    _blurredInfoSection(S().cause),
+      
+                    PreferenceUtils.getBool(prefKeys.loggedIn)?
+                    _buildInfoSection(S().organicTreatment,PreferenceUtils.getString(prefKeys.language)=="en"? disease.organicTreatmentPlanEnglish:disease.organicTreatmentPlan)
+                        :
+                    _blurredInfoSection(S().organicTreatment),
+      
+                    PreferenceUtils.getBool(prefKeys.loggedIn)?
+                    _buildInfoSection(S().chemicalTreatment,PreferenceUtils.getString(prefKeys.language)=="en"? disease.chemicalTreatmentPlanEnglish:disease.chemicalTreatmentPlan)
+                        :
+                    _blurredInfoSection(S().chemicalTreatment),
+      
+                  ],
+                );
+              },
+            ),
+            Column(
+              children: [
+                SizedBox(height: 40,),
+                IconButton(
+                    onPressed: (){
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UploadImageScreen(
+                                chosenType: chosenType,
+                              ),
+                          )
+                      );
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
