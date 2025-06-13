@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nabtiti/NABTITI/UI/Login/Page/ForgetPassword.dart';
-
 import '../../../../generated/l10n.dart';
 import '../../../../main.dart';
 import '../../../shared.dart';

@@ -240,7 +240,6 @@ class _PostDetectionResultScreenState extends State<PostDetectionResultScreen> {
   }
 
   Future<void> _getDetectionsAndNavigate() async {
-
     try {
       final fileName = widget.imageFile.path.split('/').last;
       FormData formData = FormData.fromMap({
